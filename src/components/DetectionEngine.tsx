@@ -584,7 +584,7 @@ export default function DetectionEngine({ isDemoMode = false }: { isDemoMode?: b
                      ) : null}
                      {error?.includes("API") ? (
                         <li className="text-[11px] text-white/30 font-sans italic flex gap-3">
-                           <span className="text-[#00D1FF]">•</span> Ensure GEMINI_API_KEY is correctly initialized in environment.
+                           <span className="text-[#00D1FF]">•</span> Ensure VITE_GEMINI_API_KEY is correctly initialized in environment.
                         </li>
                      ) : null}
                      {error?.includes("Neural Overload") ? (
