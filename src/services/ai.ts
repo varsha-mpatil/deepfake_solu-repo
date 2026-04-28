@@ -1,15 +1,17 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY;
+const apiKey =
+  (import.meta.env && (import.meta.env.VITE_GEMINI_API_KEY as string | undefined)) ||
+  process.env.GEMINI_API_KEY;
 if (!apiKey) {
-  console.warn("GEMINI_API_KEY is not defined. AI features will be unavailable.");
+  console.warn("VITE_GEMINI_API_KEY is not defined. AI features will be unavailable.");
 }
 
 const ai = new GoogleGenAI({ apiKey: apiKey || "" });
 
 export async function analyzeMedia(file: File, mimeType: string) {
   if (!apiKey || apiKey === "undefined") {
-    throw new Error("AI analysis is unavailable: Missing GEMINI_API_KEY. \nIf you are on Vercel, please add GEMINI_API_KEY to your Project Environment Variables in the Vercel Dashboard.");
+    throw new Error("AI analysis is unavailable: Missing VITE_GEMINI_API_KEY. \nPlease add VITE_GEMINI_API_KEY to your Netlify site environment variables.");
   }
 
   try {
