@@ -8,8 +8,8 @@ if (!apiKey) {
 const ai = new GoogleGenAI({ apiKey: apiKey || "" });
 
 export async function analyzeMedia(file: File, mimeType: string) {
-  if (!apiKey) {
-    throw new Error("AI analysis is unavailable: Missing API Key. Please configure GEMINI_API_KEY in the Secrets panel.");
+  if (!apiKey || apiKey === "undefined") {
+    throw new Error("AI analysis is unavailable: Missing GEMINI_API_KEY. \nIf you are on Vercel, please add GEMINI_API_KEY to your Project Environment Variables in the Vercel Dashboard.");
   }
 
   try {

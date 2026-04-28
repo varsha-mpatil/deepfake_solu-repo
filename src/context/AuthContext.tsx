@@ -49,8 +49,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (error: any) {
+      console.error("Authentication Error:", error);
+      if (error.code === 'auth/unauthorized-domain') {
+        alert(`Authentication Failed: This domain (${window.location.hostname}) is not authorized in your Firebase Project. 
+\nPlease go to the Firebase Console -> Authentication -> Settings -> Authorized Domains and add ${window.location.hostname}`);
+      } else {
+        alert(`Authentication Error: ${error.message}`);
+      }
+    }
   };
 
   const logout = () => signOut(auth);
