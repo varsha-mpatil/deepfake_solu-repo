@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Public and private user information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Scan": {
+      "title": "Forensic Scan",
+      "description": "Details of a deepfake detection analysis",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileType": { "type": "string" },
+        "verdict": { "type": "string", "enum": ["SECURE", "SUSPICIOUS", "MANIPULATED"] },
+        "score": { "type": "number" },
+        "confidence": { "type": "number" },
+        "riskLevel": { "type": "string", "enum": ["Low", "Medium", "High", "Critical"] },
+        "findings": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "fileName", "fileType", "verdict", "score", "confidence", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "scans/{scanId}": {
+      "schema": "Scan",
+      "description": "Forensic analysis results"
+    }
+  }
+}

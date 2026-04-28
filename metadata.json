@@ -1,0 +1,6 @@
+{
+  "name": "FakeXpose",
+  "description": "An advanced AI-powered detection platform to identify and analyze potential deepfake media, ensuring digital integrity and security. Associated with GitHub repo: deepfake_solu-repo.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}

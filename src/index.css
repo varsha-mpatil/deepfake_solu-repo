@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Outfit", sans-serif;
+  --font-mono: "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
+  --color-primary-glow: rgba(0, 209, 255, 0.5);
+  --color-accent-glow: rgba(242, 125, 38, 0.5);
+
+  /* Override absolute common palette to use RGB for compatibility with html2canvas */
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-yellow-400: #fbbf24;
+  --color-yellow-500: #f59e0b;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-slate-400: #94a3b8;
+  --color-gray-400: #9ca3af;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* Global Fallbacks to Hex to prevent oklch in shadows and rings */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: #00000000;
+}
+
+:root {
+  --color-accent: #F27D26;
+  --color-primary: #00D1FF;
+  --color-secondary: #00FFEA;
+  --color-mint: #98FFD4;
+  
+  /* State Colors */
+  --forensic-secure: #34d399;
+  --forensic-suspicious: #fbbf24;
+  --forensic-manipulated: #f87171;
+}
+
+body {
+  @apply bg-[#030304] text-white antialiased overflow-x-hidden;
+  cursor: none; /* Custom cursor used across the landing and internal pages */
+}
+
+/* 3D Perspective Container */
+.perspective-container {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@layer base {
+  * {
+    @apply border-[#ffffff0a];
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Animated Gradient Text */
+.gradient-text-animate {
+  background: linear-gradient(
+    to right,
+    var(--color-primary),
+    var(--color-secondary),
+    var(--color-mint),
+    var(--color-primary)
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flow 8s ease-in-out infinite;
+}
+
+@keyframes flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glassmorphism */
+.glass {
+  @apply backdrop-blur-xl bg-white/[0.02] border border-white/5;
+}
+
+/* Scan Line */
+.scan-line {
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  box-shadow: 0 0 15px var(--color-primary);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scan 4s ease-in-out infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+/* Shimmer Effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: 0.5s;
+}
+.shimmer:hover::after {
+  left: 100%;
+  top: 100%;
+}

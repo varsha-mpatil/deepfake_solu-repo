@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connection test document
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // --- Users ---
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.uid == userId &&
+               data.email is string && data.email.size() <= 256 &&
+               data.createdAt == request.time;
+      }
+
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming()) && incoming().keys().size() >= 3;
+      allow update: if isOwner(userId) && 
+                      incoming().uid == resource.data.uid &&
+                      incoming().createdAt == resource.data.createdAt &&
+                      incoming().diff(resource.data).affectedKeys().hasOnly(['displayName', 'photoURL']);
+    }
+
+    // --- Scans ---
+    match /scans/{scanId} {
+      function isValidScan(data) {
+        return data.userId == request.auth.uid &&
+               data.id == scanId &&
+               data.fileName is string && data.fileName.size() <= 256 &&
+               data.fileType is string &&
+               data.verdict in ['SECURE', 'SUSPICIOUS', 'MANIPULATED'] &&
+               data.score is number && data.score >= 0 && data.score <= 100 &&
+               data.confidence is number &&
+               data.riskLevel in ['Low', 'Medium', 'High', 'Critical'] &&
+               data.findings is list &&
+               data.createdAt == request.time;
+      }
+
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidScan(incoming()) && isValidId(scanId);
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}
